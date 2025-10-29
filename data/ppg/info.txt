@@ -1,0 +1,3 @@
+folder, user, test,note
+1, "Palma Errico", v2, none
+2, "Palma Errico", v2, solo ispirazione
