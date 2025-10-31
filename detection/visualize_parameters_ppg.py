@@ -33,7 +33,7 @@ for id in v2:
     delta_hr_vals = np.loadtxt(f"{folder_path}{id}_delta_hr_vals.csv", delimiter=",") 
     delta_hr_times = np.arange(len(delta_hr_vals))
     # Plotting
-    fig, axs = plt.subplots(3, 1, figsize=(12, 6), sharex=True)
+    fig, axs = plt.subplots(5, 1, figsize=(12, 6), sharex=True)
 
     axs[0].plot(delta_hr_times[offset:], delta_hr_vals[offset:], label='ΔHR (bpm)', color='tab:blue')
     
@@ -91,7 +91,26 @@ for id in v2:
     axs[2].legend()
     axs[2].grid(True)
 
+    ppg = np.loadtxt(f"{folder_path}{id}.csv", delimiter=",",skiprows=1) 
+    time_ppsg = np.arange(len(ppg)/50, step=1/50)
+    axs[3].plot(time_ppsg[400:-100], ppg[400:-100,1], label='PPG Signal', color='tab:orange')
+    # set max value and min value for y axis
+    axs[3].set_ylim(1100, 1600)
+    axs[3].set_ylabel('PPG Amplitude')
+    axs[3].set_xlabel('Time (s)')
+    axs[3].set_title('PPG Signal')
     
- 
+    axs[4].plot(time_ppsg, ppg[:,0], label='bcg Signal', color='tab:orange')
+
     plt.tight_layout()
     plt.savefig(f'{folder_path}plot_{id}.png')
+    plt.figure()
+    plt.plot(time_ppsg, ppg[:,0], label='bcg Signal', color='tab:orange')
+    for start, end in trattenute:
+        plt.axvspan(start/1000, end/1000, color='yellow', alpha=0.5)
+    plt.title('BCG Signal')
+    plt.xlabel('Time (s)')
+    plt.ylabel('BCG Amplitude')
+    plt.xlim(0,200)  
+    plt.savefig(f'{folder_path}bcgplot_{id}.png')
+    
