@@ -71,7 +71,7 @@ if __name__ == "__main__":
    
 
     dataset_path = 'data/dataset5'
-    exp_folder = f'{dataset_path}/experiments/smin{stride_min}_smax{stride_max}_e{error_mean}_{error_std}_seed{seed}'
+    exp_folder = f'{dataset_path}/experiments/smin{stride_min}_smax{stride_max}_seed{seed}'
     if  os.path.exists(exp_folder):
         print(f"Folder {exp_folder} already exists. Remove it first!")
     else:
