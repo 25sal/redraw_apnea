@@ -297,10 +297,11 @@ if __name__ == "__main__":
         return t_s, hr, dhr, edr, t_lfhf, lfhf
 
 
-    v2 = [2, 4, 5, 10,12,14,15,16, 18, 19,20]  # Example V2 values for the plot
+    v2 = [1,2]  # Example V2 values for the plot
    
     
     from pathlib import Path
+
 
     v2 = [1,2]
     folders = ["data/dataset5", "data/ppg"]
@@ -313,3 +314,4 @@ if __name__ == "__main__":
     # fs for ppg is 50 Hz
     for id in v2:
         run_one(f"{folder_path}/{id}.csv", fs=fs_dict[folder_path], header=0)
+

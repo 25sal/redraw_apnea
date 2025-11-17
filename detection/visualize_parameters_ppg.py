@@ -11,27 +11,17 @@ trattenute = {"v1": [(60000, 90000), (120000, 150000), (180000, 210000), (240000
             }
 trattenute = trattenute["v2"] 
 v2 = [2, 4, 5, 10,12,14,15,16, 18, 19,20]  # Example V2 values for the plot
-
-
-folders = ["data/dataset5", "data/ppg"]
-fs_dict = {
-    "data/dataset5": 1000,
-    "data/ppg": 50
-}
-
+v2 = [1,2]  # Example V2 values for the plot
 # Reload the uploaded ECG data (file 5.csv)
-folder_path = folders[1]
-
+folder_path = 'data/ppg/'
 PAUSE_MIN_SEC = 10              # min length of pause in EDR
 
 events_detected = 0
 
-v2 =[1,2]
-
 for id in v2:
     print(f"generating plot {id}")
-
     file_path = f'{folder_path}{id}.csv'
+
     # Compute parameters
 
     #ecg_vals = np.loadtxt(file_path)
@@ -40,12 +30,10 @@ for id in v2:
 
 
     offset = 5
-
-    delta_hr_vals = np.loadtxt(f"{folder_path}/{id}_delta_hr_vals.csv", delimiter=",") 
-
+    delta_hr_vals = np.loadtxt(f"{folder_path}{id}_delta_hr_vals.csv", delimiter=",") 
     delta_hr_times = np.arange(len(delta_hr_vals))
     # Plotting
-    fig, axs = plt.subplots(3, 1, figsize=(12, 6), sharex=True)
+    fig, axs = plt.subplots(5, 1, figsize=(12, 6), sharex=True)
 
     axs[0].plot(delta_hr_times[offset:], delta_hr_vals[offset:], label='ΔHR (bpm)', color='tab:blue')
     
@@ -63,10 +51,7 @@ for id in v2:
    
 
     #Plotting lh/hf
-
-    lfhf_vals = np.loadtxt(f"{folder_path}/{id}_delta_lfhf_vals.csv", delimiter=",")
-
-
+    lfhf_vals = np.loadtxt(f"{folder_path}{id}_delta_lfhf_vals.csv", delimiter=",")
     lfhf_times = np.arange(len(lfhf_vals))
     
 
@@ -86,9 +71,7 @@ for id in v2:
     '''
 
 
-
-    edr_vals = np.loadtxt(f"{folder_path}/{id}_edr_vals.csv", delimiter=",")
-
+    edr_vals = np.loadtxt(f"{folder_path}{id}_edr_vals.csv", delimiter=",")
     edr_times = np.arange(len(edr_vals))
     
     axs[1].legend()
@@ -108,9 +91,26 @@ for id in v2:
     axs[2].legend()
     axs[2].grid(True)
 
+    ppg = np.loadtxt(f"{folder_path}{id}.csv", delimiter=",",skiprows=1) 
+    time_ppsg = np.arange(len(ppg)/50, step=1/50)
+    axs[3].plot(time_ppsg[400:-100], ppg[400:-100,1], label='PPG Signal', color='tab:orange')
+    # set max value and min value for y axis
+    axs[3].set_ylim(1100, 1600)
+    axs[3].set_ylabel('PPG Amplitude')
+    axs[3].set_xlabel('Time (s)')
+    axs[3].set_title('PPG Signal')
     
- 
+    axs[4].plot(time_ppsg, ppg[:,0], label='bcg Signal', color='tab:orange')
+
     plt.tight_layout()
-
-    plt.savefig(f'{folder_path}/plot_{id}.png')
-
+    plt.savefig(f'{folder_path}plot_{id}.png')
+    plt.figure()
+    plt.plot(time_ppsg, ppg[:,0], label='bcg Signal', color='tab:orange')
+    for start, end in trattenute:
+        plt.axvspan(start/1000, end/1000, color='yellow', alpha=0.5)
+    plt.title('BCG Signal')
+    plt.xlabel('Time (s)')
+    plt.ylabel('BCG Amplitude')
+    plt.xlim(0,200)  
+    plt.savefig(f'{folder_path}bcgplot_{id}.png')
+    

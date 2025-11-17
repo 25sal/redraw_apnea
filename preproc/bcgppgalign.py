@@ -57,3 +57,4 @@ for subfolder in subfolders:
             # convert last_start to string for filename %Y-%m-%d_%H-%M-%S
             filename = datetime.strftime(last_start, '%Y-%m-%d_%H-%M-%S')
             aligned.to_csv(f'{folder_path}/{subfolder}.csv', index=False)
+
