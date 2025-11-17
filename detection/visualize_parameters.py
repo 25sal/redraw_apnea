@@ -12,15 +12,23 @@ trattenute = {"v1": [(60000, 90000), (120000, 150000), (180000, 210000), (240000
 trattenute = trattenute["v2"] 
 v2 = [2, 4, 5, 10,12,14,15,16, 18, 19,20]  # Example V2 values for the plot
 
+folders = ["data/dataset5", "data/ppg"]
+fs_dict = {
+    "data/dataset5": 1000,
+    "data/ppg": 50
+}
+
 # Reload the uploaded ECG data (file 5.csv)
-file_path = 'data/dataset5/'
+folder_path = folders[1]
 PAUSE_MIN_SEC = 10              # min length of pause in EDR
 
 events_detected = 0
 
+v2 =[1,2]
+
 for id in v2:
     print(f"generating plot {id}")
-    file_path = f'data/dataset5/{id}.csv'
+    file_path = f'{folder_path}/{id}.csv'
     
     # Compute parameters
 
@@ -30,7 +38,7 @@ for id in v2:
 
 
     offset = 5
-    delta_hr_vals = np.loadtxt(f"data/dataset5/{id}_delta_hr_vals.csv", delimiter=",") 
+    delta_hr_vals = np.loadtxt(f"{folder_path}/{id}_delta_hr_vals.csv", delimiter=",") 
     delta_hr_times = np.arange(len(delta_hr_vals))
     # Plotting
     fig, axs = plt.subplots(3, 1, figsize=(12, 6), sharex=True)
@@ -51,7 +59,7 @@ for id in v2:
    
 
     #Plotting lh/hf
-    lfhf_vals = np.loadtxt(f"data/dataset5/{id}_delta_lfhf_vals.csv", delimiter=",")
+    lfhf_vals = np.loadtxt(f"{folder_path}/{id}_delta_lfhf_vals.csv", delimiter=",")
     lfhf_times = np.arange(len(lfhf_vals))
     
 
@@ -69,9 +77,9 @@ for id in v2:
         for start, end in lfhf_intervals:
             axs[1].axvspan(start, end, alpha=0.1, color='red', label='LF/HF increasing' if start == lfhf_intervals[0][0] else None)
     '''
-   
-    
-    edr_vals = np.loadtxt(f"data/dataset5/{id}_edr_vals.csv", delimiter=",")
+
+
+    edr_vals = np.loadtxt(f"{folder_path}/{id}_edr_vals.csv", delimiter=",")
     edr_times = np.arange(len(edr_vals))
     
     axs[1].legend()
@@ -94,4 +102,4 @@ for id in v2:
     
  
     plt.tight_layout()
-    plt.savefig(f'data/dataset5/plot_{id}.png')
+    plt.savefig(f'{folder_path}/plot_{id}.png')

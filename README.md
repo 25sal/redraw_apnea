@@ -1,6 +1,6 @@
 # Python scripts for data elaboration
 
-
+Remember to extract the dataset files in the data/subdir
 
 ## preproc
 The scripts in this package allows preprocessing of dataset file to get an uniform representation for the elaboration of the next steps

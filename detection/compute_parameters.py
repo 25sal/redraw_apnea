@@ -282,8 +282,8 @@ if __name__ == "__main__":
     # Replace '2.csv' and '19.csv' with your filenames (single-column ECG)
     import pandas as pd
 
-    def run_one(ecg_file, fs=100):
-        ecg = pd.read_csv(ecg_file, header=None).iloc[:,0].values.astype(float)
+    def run_one(ecg_file, fs=100, header=None):
+        ecg = pd.read_csv(ecg_file, header=header).iloc[:,0].values.astype(float)
         t_s, hr, dhr, edr = compute_hr_dhr_edr_fixed_grid(ecg, fs=fs, grid_hz=1)
         
         t_lfhf, lfhf = compute_lfhf(hr, t_s, psd_fs=4.0, win_s=60, step_s=1)
@@ -302,9 +302,14 @@ if __name__ == "__main__":
     
     from pathlib import Path
 
-    
+    v2 = [1,2]
+    folders = ["data/dataset5", "data/ppg"]
+    folder_path = folders[1]
+    fs_dict = {
+        "data/dataset5": 1000,
+        "data/ppg": 50
+    }
+    # fs for dataset5 is 1000 Hz
+    # fs for ppg is 50 Hz
     for id in v2:
-        df = pd.read_csv(f"data/dataset5/{id}.txt", header=None, delimiter='\t')
-        ecg = df.iloc[:,0-1].values.astype(float)
-        pd.Series(ecg).to_csv(f"data/dataset5/{id}.csv", index=False, header=False)
-        run_one(f"data/dataset5/{id}.csv", fs=1000)
+        run_one(f"{folder_path}/{id}.csv", fs=fs_dict[folder_path], header=0)
