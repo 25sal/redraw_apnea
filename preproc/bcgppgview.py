@@ -8,7 +8,7 @@ trattenute = {"v1": [(60000, 90000), (120000, 150000), (180000, 210000), (240000
             }
 trattenute = trattenute["v2"] 
 v2 = [2, 4, 5, 10,12,14,15,16, 18, 19,20]  # Example V2 values for the plot
-v2 = [1,2]  # Example V2 values for the plot
+v2 = [1,2,3]  # Example V2 values for the plot
 # Reload the uploaded ECG data (file 5.csv)
 folder_path = 'data/ppg/'
 
@@ -27,7 +27,7 @@ for id in v2:
         axs[0].plot(time[left*50:(left+wsize)*50], signal[left*50:(left+wsize)*50,0], label='BCG Signal', color='tab:blue')
         axs[0].set_ylabel('Amplitude')
         axs[0].set_xlabel('Time (s)')
-        axs[0].set_title('BC Signal Segment')
+        axs[0].set_title('PPG Signal Segment')
         for start, end in trattenute:
             if start/1000 >= time[left] and end/1000 <= time[left+wsize]:
                     axs[0].axvspan(start/1000, end/1000, color='yellow', alpha=0.5)     
@@ -37,7 +37,7 @@ for id in v2:
         axs[1].plot(time[left*50:(left+wsize)*50], signal[left*50:(left+wsize)*50, 1], label='PPG Signal', color='tab:blue')
         axs[1].set_ylabel('Amplitude')
         axs[1].set_xlabel('Time (s)')
-        axs[1].set_title('PPG Signal Segment')
+        axs[1].set_title('BCG Signal Segment')
 
         for start, end in trattenute:
             if start/1000 >= time[left] and end/1000 <= time[left+wsize]:

@@ -6,7 +6,7 @@ import glob
 
 
 folder_path= 'data/ppg'
-subfolders = [1,2]
+subfolders = [1,2,3]
 for subfolder in subfolders:
     folder = f"{folder_path}/{subfolder}/"
     #read bcg file
