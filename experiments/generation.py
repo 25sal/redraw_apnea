@@ -6,7 +6,10 @@ def sample_windows(stride_min, stride_max, len, width=30000, seed=42):
     x = [0]
     np.random.seed(seed)
     while x[-1] + width < len:
-        stride =np.random.randint(stride_min, stride_max)
+        if stride_min == stride_max:
+            stride = stride_min
+        else:
+            stride =np.random.randint(stride_min, stride_max)
         x.append(x[-1] + stride)
     return x 
 
@@ -30,14 +33,16 @@ def gt_gaussian(gt_intervals, window, offset=[10000,5000]):
             dx = x[1] - x[0]
             intersection_mask = (x >= intersect_start) & (x <= intersect_end)
             score += np.sum(gaussian[intersection_mask]) * dx
+ 
             # drow the window the gaussian and the gt interval for debugging
-            #import matplotlib.pyplot as plt
-            #plt.plot(x, gaussian)
-            #plt.axvspan(gt_start, gt_end, color='red', alpha=0.3)
-            #plt.axvspan(wstart, wend, color='green', alpha=0.3)
-            #plt.legend(['gaussian', 'gt interval', 'window'])
-            #plt.show()
-        
+            '''
+            import matplotlib.pyplot as plt
+            plt.plot(x, gaussian)
+            plt.axvspan(gt_start, gt_end, color='red', alpha=0.3)
+            plt.axvspan(wstart, wend, color='green', alpha=0.3)
+            plt.legend(['gaussian', 'gt interval', 'window'])
+            plt.show()
+            '''
     return score
 
 def gt__intersections_count(gt_intervals, window, offset=[10000,4000]):
@@ -50,17 +55,15 @@ def gt__intersections_count(gt_intervals, window, offset=[10000,4000]):
 
 if __name__ == "__main__":
     # if the folder does not exist, create it
-    gaussian_mean = -7
-    gaussian_std = 8
+    gaussian_mean = -7000
+    gaussian_std = 8000
     
     # set equals for a constant strid
     stride_min = 10000
-    stride_max = 15000
+    stride_max = 10000
     
-    # set to 0 for no error (only for gaussian metrics)
-    error_mean = -7
-    error_std = 15
-    
+
+
     # for reproducibility
     seed = 42
     
@@ -71,7 +74,7 @@ if __name__ == "__main__":
    
 
     dataset_path = 'data/dataset5'
-    exp_folder = f'{dataset_path}/experiments/smin{stride_min}_smax{stride_max}_e{error_mean}_{error_std}_seed{seed}'
+    exp_folder = f'{dataset_path}/experiments/smin{stride_min}_smax{stride_max}_seed{seed}'
     if  os.path.exists(exp_folder):
         print(f"Folder {exp_folder} already exists. Remove it first!")
     else:
@@ -111,5 +114,5 @@ if __name__ == "__main__":
                     header = 'window_start'
                     for metric in score_list.keys():
                         header += f',score_{metric}'
-                    np.savetxt(output_filename, m, delimiter=',', header=header, comments='', fmt='%d')
+                    np.savetxt(output_filename, m, delimiter=',', header=header, comments='', fmt='%d,%.3f,%.3f')
                     print(f'Saved {output_filename}')
